@@ -1,0 +1,675 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "9af76eac-31cb-4c0a-b029-cdc288a5faeb",
+   "metadata": {},
+   "source": [
+    "---\n",
+    "title: 'Лабораторна робота №12. Об’єктно-орієнтоване програмування. Частина ІІ'\n",
+    "description:\n",
+    "   Документ зроблено за допомогою [Quarto](https://quarto.org/)\n",
+    "author: \"&copy; [<span style='color: blue;'> Мардєєва Діана </span>], 2024\"\n",
+    "date: \"02.12.2024\"\n",
+    "lang: ukr\n",
+    "format:\n",
+    "  html:\n",
+    "    code-fold: true\n",
+    "    toc: true # меню\n",
+    "    toc_float: # спливаюче меню  \n",
+    "      collapsed: true # авто\n",
+    "      number_sections: true\n",
+    "jupyter: python3\n",
+    "---"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "0354b690-aaec-425f-bd11-155b87d4782d",
+   "metadata": {},
+   "source": [
+    "__Мета:__ _навчитися програмувати в стилі об’єектно-орієнтованого програмування._"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "3ed2a05b-58d8-4663-b534-6af1997115c2",
+   "metadata": {},
+   "source": [
+    "## Основи об’єктно-орієнтованого програмування на Python. Метод str()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "ffecbb46-aa40-44fd-b8fd-aa5ce9df390a",
+   "metadata": {},
+   "source": [
+    "### Приклад 1"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "5e57939c-bc89-4d9d-9a9b-bcd95c849a4c",
+   "metadata": {},
+   "source": [
+    "Нам потрібен клас, що вміє рахувати секунди. Чи легко? Це не так просто, як Ви думаєте, оскільки ми матимемо певні вимоги.\n",
+    "\n",
+    "Прочитайте їх уважно, оскільки клас, який Ви пишете, використовуватиметься для запуску ракет, які виконують міжнародні місії на Марс. Це велика відповідальність. Ми розраховуємо на Вас!\n",
+    "\n",
+    "Ваш клас буде називатися 'Timer'. Його конструктор приймає три аргументи, що представляють годинник (значення з діапазону [0..23] - ми будемо використовувати воєнний час), хвилини (з діапазону [0..59]) та секунди (з діапазону [0..59]).\n",
+    "\n",
+    "Нуль – це значення за замовчанням всіх вищеперелічених параметрів. Немає необхідності виконувати будь-які перевірки.\n",
+    "\n",
+    "Сам клас має забезпечувати такі можливості:\n",
+    "\n",
+    "- об’єкти класу повинні бути “друкованими”, тобто вони повинні мати можливість неявно перетворювати себе на рядки наступного виду: “чч:мм:сс” з додаванням провідних нулів, коли будь-яке з значень менше 10;\n",
+    "- клас повинен бути оснащений методами без параметрів, званими next_second() і previous_second(), що збільшують час, що зберігається всередині об’єктів, на +1/-1 секунд відповідно.\n",
+    "Використовуйте такі підказки:\n",
+    "\n",
+    "- всі властивості об’єкта мають бути закритими;\n",
+    "- розгляньте можливість написання окремої функції (не методу!) для форматування рядка часу.\n",
+    "Доповніть шаблон, який ми надали в редакторі. Запустіть свій код і перевірте, чи виглядає результат так само, як наш."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "a7e84988-13ec-4a00-b0d7-03cfb9168f69",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "class Timer:\n",
+    "    def __init__(self, hours=0, minutes=0, seconds=0):\n",
+    "        self.__hours = hours\n",
+    "        self.__minutes = minutes\n",
+    "        self.__seconds = seconds\n",
+    "\n",
+    "    def __str__(self):\n",
+    "        return self.__format_time()\n",
+    "\n",
+    "    def __format_time(self):\n",
+    "        return f\"{self.__hours:02}:{self.__minutes:02}:{self.__seconds:02}\"\n",
+    "\n",
+    "    def next_second(self):\n",
+    "        self.__seconds += 1\n",
+    "        if self.__seconds == 60:\n",
+    "            self.__seconds = 0\n",
+    "            self.__minutes += 1\n",
+    "            if self.__minutes == 60:\n",
+    "                self.__minutes = 0\n",
+    "                self.__hours += 1\n",
+    "                if self.__hours == 24:\n",
+    "                    self.__hours = 0\n",
+    "\n",
+    "    def previous_second(self):\n",
+    "        self.__seconds -= 1\n",
+    "        if self.__seconds < 0:\n",
+    "            self.__seconds = 59\n",
+    "            self.__minutes -= 1\n",
+    "            if self.__minutes < 0:\n",
+    "                self.__minutes = 59\n",
+    "                self.__hours -= 1\n",
+    "                if self.__hours < 0:\n",
+    "                    self.__hours = 23\n",
+    "\n",
+    "timer = Timer(23, 59, 59)\n",
+    "print(timer)\n",
+    "timer.next_second()\n",
+    "print(timer)\n",
+    "timer.previous_second()\n",
+    "print(timer)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "a6f7c550-5e53-469a-9351-d39084a8a38a",
+   "metadata": {},
+   "source": [
+    "## Очікуваний вивід:\n",
+    "\n",
+    "'23:59:59'\n",
+    "'00:00:00'\n",
+    "'23:59:59'"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "42472bc5-032d-44bb-a641-6d014ee07232",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "23:59:59\n",
+    "00:00:00\n",
+    "23:59:59"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "53d10a16-29ad-4429-af77-16e38d82f9ba",
+   "metadata": {},
+   "source": [
+    "### Приклад 2"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "265056fd-d0f4-43f0-a690-79624a4c8310",
+   "metadata": {},
+   "source": [
+    "Ваше завдання – реалізувати клас під назвою 'Weeker'. Так, Ваші очі не обманюють Вас – ця назва походить від того факту, що об’єкти цього класу можуть зберігати та керувати днями тижня.\n",
+    "\n",
+    "Конструктор класу приймає один аргумент – рядок. Рядок є назвою дня тижня, і єдині допустимі значення повинні надходити з наступного набору:\n",
+    "\n",
+    "'Mon' 'Tue' 'Wed' 'Thu' 'Fri' 'Sa't 'Sun'\n",
+    "\n",
+    "Виклик конструктора з аргументом ззовні цього набору повинен викликати виняток 'WeekDayError' (визначте його самостійно; не турбуйтеся, скоро ми поговоримо про об’єктивну природу винятків). Клас повинен надати такі можливості:\n",
+    "\n",
+    "об’єкти класу мають бути “друкованими”, тобто. вони повинні мати можливість неявно перетворювати себе на рядки тієї ж форми, що й аргументи конструктора; клас повинен бути оснащений однопараметричними методами з іменами 'add_days(n)' і 'subtract_days(n)', де n є цілим числом число та оновлення дня тижня, що зберігається всередині об’єкта, таким чином, щоб відобразити зміну дати на вказану кількість днів уперед або назад. всі властивості об’єкта мають бути прихованими; Заповніть шаблон, який ми надали в редакторі, запустіть свій код і перевірте, чи виглядає Ваш результат так само, як наш."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "4f45b543-c4ab-4383-8b03-e36fd07f7fda",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "class WeekDayError(Exception):\n",
+    "    pass\n",
+    "\n",
+    "\n",
+    "class Weeker:\n",
+    "    DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']\n",
+    "\n",
+    "    def __init__(self, day):\n",
+    "        if day not in self.DAYS:\n",
+    "            raise WeekDayError\n",
+    "        self._day = day\n",
+    "\n",
+    "    def __str__(self):\n",
+    "        return self._day\n",
+    "\n",
+    "    def add_days(self, n):\n",
+    "        current_index = self.DAYS.index(self._day)\n",
+    "        new_index = (current_index + n) % 7\n",
+    "        self._day = self.DAYS[new_index]\n",
+    "\n",
+    "    def subtract_days(self, n):\n",
+    "        current_index = self.DAYS.index(self._day)\n",
+    "        new_index = (current_index - n) % 7\n",
+    "        self._day = self.DAYS[new_index]\n",
+    "\n",
+    "\n",
+    "try:\n",
+    "    weekday = Weeker('Mon')\n",
+    "    print(weekday)\n",
+    "    weekday.add_days(15)\n",
+    "    print(weekday)\n",
+    "    weekday.subtract_days(23)\n",
+    "    print(weekday)\n",
+    "    weekday = Weeker('Monday')\n",
+    "except WeekDayError:\n",
+    "    print(\"Sorry, I can't serve your request.\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "3c1d52de-8cee-411a-ac90-eb9b8e72ffe3",
+   "metadata": {},
+   "source": [
+    "#### Очікуваний вивід:\n",
+    "'Mon'\n",
+    "'Thu'\n",
+    "'Sun'\n",
+    "'Sorry, I can't serve your request.'"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "6bee9e15-2041-4952-98e9-881621659bba",
+   "metadata": {},
+   "source": [
+    "Mon\n",
+    "Tue\n",
+    "Sun\n",
+    "Sorry, I can't serve your request."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "540d05c2-8fd8-4b74-9950-d3fbee266d30",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "Інший варіант:\n",
+    "class WeekDayError(Exception):\n",
+    "    pass\n",
+    "\n",
+    "\n",
+    "class Weeker:\n",
+    "    __days = [\"Mon\", \"Tue\", \"Wed\", \"Thu\", \"Fri\", \"Sat\", \"Sun\"]\n",
+    "\n",
+    "    def __init__(self, day):\n",
+    "        if day not in self.__days:\n",
+    "            raise WeekDayError(f\"Invalid day: {day}\")\n",
+    "        self.__current_day_index = self.__days.index(day)\n",
+    "\n",
+    "    def __str__(self):\n",
+    "        return self.__days[self.__current_day_index]\n",
+    "\n",
+    "    def add_days(self, n):\n",
+    "        self.__current_day_index = (self.__current_day_index + n) % len(self.__days)\n",
+    "\n",
+    "    def subtract_days(self, n):\n",
+    "        self.__current_day_index = (self.__current_day_index - n) % len(self.__days)\n",
+    "\n",
+    "try:\n",
+    "    weeker = Weeker(\"Tue\")\n",
+    "    print(weeker)\n",
+    "    weeker.add_days(3)\n",
+    "    print(weeker)\n",
+    "    weeker.subtract_days(5)\n",
+    "    print(weeker)\n",
+    "    weeker = Weeker(\"Funday\")\n",
+    "except WeekDayError as e:\n",
+    "    print(e)\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "e6669de3-9467-4cad-9667-feb70cd77e85",
+   "metadata": {},
+   "source": [
+    "Tue\n",
+    "Fri\n",
+    "Sun\n",
+    "Invalid day: Funday"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "99157d6b-34ec-49f5-911c-c38b0c4856bc",
+   "metadata": {},
+   "source": [
+    "### Приклад 3"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "440aa627-2ef6-4773-aff5-d07b0b0a1287",
+   "metadata": {},
+   "source": [
+    "Давайте відвідаємо зовсім особливе місце – площину з декартовою системою координат (Ви можете дізнатися більше про цю концепцію тут: Декартова система координат).\n",
+    "\n",
+    "Кожну точку, розташовану на площині, можна описати як пару координат, яку зазвичай називають x і y. Ми хочемо, щоб Ви написали клас Python, який зберігає обидві координати як числа з плаваючою комою. Більше того, ми хочемо, щоб об’єкти цього класу вважали відстані між будь-якою з двох точок, розташованих на площині.\n",
+    "\n",
+    "Завдання досить просте, якщо Ви скористаєтеся функцією з ім’ям 'hypot()' (доступна в модулі 'math'), яка вважає довжину гіпотенузи прямокутного трикутника (докладніше тут: Гіпотенуза) і тут: Trigonometric functions.\n",
+    "\n",
+    "Ось як ми уявляємо собі клас:\n",
+    "\n",
+    "- він називається 'Point';\n",
+    "- його конструктор приймає два аргументи (x і y відповідно), обидва з яких за умовчанням дорівнюють нулю;\n",
+    "- всі властивості мають бути прихованими;\n",
+    "- клас містить два методи без параметрів, названі 'getx()' та 'gety()', які повертають кожну з двох координат (координати зберігаються приховано, тому вони не можуть бути доступні безпосередньо з об’єкта);\n",
+    "- клас надає метод під назвою 'distance_from_xy(x, y)', який обчислює та повертає відстань між точкою, що зберігається всередині об’єкта, та іншою точкою, заданою як пара пунктів;\n",
+    "- клас надає метод під назвою 'distance_from_point(point)', який обчислює відстань (як у попередньому методі), але місце розташування іншої точки задається як інший об’єкт класу 'Point';\n",
+    "Доповніть шаблон, який ми надали в редакторі, запустіть свій код і перевірте, чи виглядає Ваш результат так само, як наш."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "66facf0d-d376-4f96-b508-e8c35e91ecd1",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import math\n",
+    "\n",
+    "class Point:\n",
+    "    def __init__(self, x=0.0, y=0.0):\n",
+    "        self._x = x\n",
+    "        self._y = y\n",
+    "\n",
+    "    def getx(self):\n",
+    "        return self._x\n",
+    "\n",
+    "    def gety(self):\n",
+    "        return self._y\n",
+    "\n",
+    "    def distance_from_xy(self, x, y):\n",
+    "        return math.hypot(self._x - x, self._y - y)\n",
+    "\n",
+    "    def distance_from_point(self, point):\n",
+    "        return self.distance_from_xy(point.getx(), point.gety())\n",
+    "\n",
+    "point1 = Point(0, 0)\n",
+    "point2 = Point(1, 1)\n",
+    "print(point1.distance_from_point(point2))  # Очікуваний вивід: 1.4142135623730951\n",
+    "print(point2.distance_from_xy(2, 0))       # Очікуваний вивід: 1.4142135623730951"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "a63f4728-fb64-4020-ae52-ffbf89e54ec7",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "1.4142135623730951\n",
+    "1.4142135623730951"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "ed4df375-b6f5-4460-bd57-f00f647d655b",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "Інший варіант:\n",
+    "import math\n",
+    "\n",
+    "class Point:\n",
+    "    def __init__(self, x=0.0, y=0.0):\n",
+    "        self.__x = float(x)\n",
+    "        self.__y = float(y)\n",
+    "\n",
+    "    def getx(self):\n",
+    "        return self.__x\n",
+    "\n",
+    "    def gety(self):\n",
+    "        return self.__y\n",
+    "\n",
+    "    def distance_from_xy(self, x, y):\n",
+    "        return math.hypot(self.__x - x, self.__y - y)\n",
+    "\n",
+    "    def distance_from_point(self, point):\n",
+    "        return math.hypot(self.__x - point.getx(), self.__y - point.gety())\n",
+    "\n",
+    "point1 = Point(3, 4)\n",
+    "point2 = Point(0, 0)\n",
+    "\n",
+    "print(\"Координати точки 1:\", point1.getx(), point1.gety())\n",
+    "print(\"Координати точки 2:\", point2.getx(), point2.gety())\n",
+    "\n",
+    "print(\"Відстань від точки 1 до (0, 0):\", point1.distance_from_xy(0, 0))\n",
+    "print(\"Відстань між точками 1 і 2:\", point1.distance_from_point(point2))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "6171c955-78a6-4a99-88eb-f2af002e38e7",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "Координати точки 1: 3.0 4.0\n",
+    "Координати точки 2: 0.0 0.0\n",
+    "Відстань від точки 1 до (0, 0): 5.0\n",
+    "Відстань між точками 1 і 2: 5.0"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "c95e8906-2241-4d76-ad3e-110566b07ebf",
+   "metadata": {},
+   "source": [
+    "## Використання композиції"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "16b0aef8-e76f-4d55-89c3-f72153402ed0",
+   "metadata": {},
+   "source": [
+    "### Завдання 1"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "e3d6551a-d287-4268-b417-8945530eab7b",
+   "metadata": {},
+   "source": [
+    "Тепер ми збираємося вбудувати клас 'Point' (див. попереднє завдання) в інший клас. Крім того, ми збираємося помістити три точки в один клас, що дозволить нам визначити трикутник. Як ми можемо це зробити?\n",
+    "\n",
+    "Новий клас буде називатися 'Triangle', і ось, що нам потрібно:\n",
+    "\n",
+    "- конструктор приймає три аргументи – вони є об’єктами класу 'Point';\n",
+    "- точки зберігаються всередині об’єкта як список;\n",
+    "- клас надає метод без параметрів з назвою 'perimeter()', який обчислює периметр трикутника, описаного трьома точками; периметр – це сума довжин усіх сторін (це просто нагадування, хоча ми впевнені, що Ви самі це чудово знаєте).\n",
+    "Доповніть шаблон, який ми надали в редакторі. Запустіть свій код і перевірте, чи збігається оцінюваний периметр з нашим.\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "0d201dd6-3b58-4062-a4b0-566243bdf4c0",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import math\n",
+    "\n",
+    "class Point:\n",
+    "    def __init__(self, x=0.0, y=0.0):\n",
+    "        self.__x = x\n",
+    "        self.__y = y\n",
+    "\n",
+    "    def getx(self):\n",
+    "        return self.__x\n",
+    "\n",
+    "    def gety(self):\n",
+    "        return self.__y\n",
+    "\n",
+    "    def distance_from_xy(self, x, y):\n",
+    "        return math.hypot(self.__x - x, self.__y - y)\n",
+    "\n",
+    "    def distance_from_point(self, point):\n",
+    "        return self.distance_from_xy(point.getx(), point.gety())\n",
+    "\n",
+    "\n",
+    "class Triangle:\n",
+    "    def __init__(self, point1, point2, point3):\n",
+    "        self.__points = [point1, point2, point3]\n",
+    "\n",
+    "    def perimeter(self):\n",
+    "        side1 = self.__points[0].distance_from_point(self.__points[1])\n",
+    "        side2 = self.__points[1].distance_from_point(self.__points[2])\n",
+    "        side3 = self.__points[2].distance_from_point(self.__points[0])\n",
+    "        return side1 + side2 + side3\n",
+    "\n",
+    "\n",
+    "# Test the code\n",
+    "point1 = Point(0, 0)\n",
+    "point2 = Point(1, 1)\n",
+    "point3 = Point(1, 0)\n",
+    "\n",
+    "triangle = Triangle(point1, point2, point3)\n",
+    "print(triangle.perimeter())  # Очікуваний вивід: 3.414213562373095\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "bf8fc1a8-9c05-4614-a8a1-e77c930c5502",
+   "metadata": {},
+   "source": [
+    "#### Очікуваний вивод:\n",
+    "\n",
+    "'3.414213562373095'"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "6f5289ad-61ba-4f50-afeb-316da035fc7d",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "3.414213562373095"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "19f3ef05-1efa-4fa2-a09e-50e19bd39063",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "Інший варіант:\n",
+    "class Triangle:\n",
+    "    def __init__(self, point1, point2, point3):\n",
+    "        self.__points = [point1, point2, point3]\n",
+    "\n",
+    "    def perimeter(self):\n",
+    "        p1, p2, p3 = self.__points\n",
+    "        side1 = p1.distance_from_point(p2)\n",
+    "        side2 = p2.distance_from_point(p3)\n",
+    "        side3 = p3.distance_from_point(p1)\n",
+    "        return side1 + side2 + side3\n",
+    "\n",
+    "point_a = Point(0, 0)\n",
+    "point_b = Point(3, 0)\n",
+    "point_c = Point(0, 4)\n",
+    "\n",
+    "triangle = Triangle(point_a, point_b, point_c)\n",
+    "\n",
+    "print(\"Периметр трикутника:\", triangle.perimeter())"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "53b24178-4ea6-4da3-aec7-eb387d9f4fde",
+   "metadata": {},
+   "source": [
+    "Периметр трикутника: 12.0"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "1eaf5ba8-c6b3-487d-bdec-2638bc89fa5d",
+   "metadata": {},
+   "source": [
+    "## Контрольні запитання"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "05830ab4-1b83-4e37-b236-869a7053b425",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "Припустимо, що наступний фрагмент коду успішно виконано:\n",
+    "class Dog: \n",
+    "    kennel = 0 \n",
+    "    def __init__(self, breed): \n",
+    "        self.breed = breed \n",
+    "        Dog.kennel += 1 \n",
+    "\n",
+    "    def __str__(self): \n",
+    "        return self.breed + \" says: Woof!\" \n",
+    "\n",
+    "\n",
+    "class SheepDog(Dog): \n",
+    "    def __str__(self): \n",
+    "        return super().__str__() + \" Don't run away, Little Lamb!\" \n",
+    "\n",
+    "\n",
+    "class GuardDog(Dog): \n",
+    "     def __str__(self): \n",
+    "         return super().__str__() + \" Stay where you are, Mister Intruder!\" \n",
+    "\n",
+    "rocky = SheepDog(\"Collie\") \n",
+    "luna = GuardDog(\"Dobermann\") "
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "5ec882f5-f020-4bd2-8d3e-68955b742c19",
+   "metadata": {},
+   "source": [
+    "1. Який очікуваний вивід наступного фрагмента коду?\n",
+    "\n",
+    "print(rocky)\n",
+    "print(luna)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "d071b8a7-9728-405a-bdc6-1297653e6004",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "Collie says: Woof! Don't run away, Little Lamb!\n",
+    "Dobermann says: Woof! Stay where you are, Mister Intruder!"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "311d2b05-685c-4f98-ab75-98743272cbc8",
+   "metadata": {},
+   "source": [
+    "2. Який очікуваний вивід наступного фрагмента коду?\n",
+    "\n",
+    "print(issubclass(SheepDog, Dog), issubclass(SheepDog, GuardDog))\n",
+    "print(isinstance(rocky, GuardDog), isinstance(luna, GuardDog))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "135bee79-00e8-44a7-9a18-b80d043c1e21",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "True False\n",
+    "False True"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "99451cd0-7115-4df6-947a-3d8e1b35be31",
+   "metadata": {},
+   "source": [
+    "## References"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "63e995c6-eb9e-4946-83de-39110d528e8e",
+   "metadata": {},
+   "source": [
+    "1. Методичка\n",
+    "2. Лекція\n",
+    "3. https://www.quora.com/How-do-you-write-the-Pythagorean-theorem-in-Python\n",
+    "4. https://docs.python.org/3/library/index.html\n",
+    "5. https://docs.python.org/3.6/library/exceptions.html\n",
+    "6. https://quarto.org/docs/authoring/callouts.html"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.12.4"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
